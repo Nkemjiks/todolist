@@ -18,7 +18,8 @@ class OngoingTodo extends Component {
         <input
           className="form-check-input"
           value={value}
-          onClick={this.toggleCheckboxChange}
+          checked={this.state.isChecked}
+          onChange={this.toggleCheckboxChange}
           type="checkbox"
           id="defaultCheck1"
         />
