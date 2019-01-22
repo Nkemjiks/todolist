@@ -26,13 +26,15 @@ class TodoItem extends Component {
     event.preventDefault();
 
     const { ongoing, todo } = this.state;
-    const addTodos = ongoing;
-    addTodos.push(todo);
-    this.setState({
-      ongoing: addTodos,
-      todo: ""
-    });
-    this.saveToLocalStorage();
+    if(todo !== '') {
+      const addTodos = ongoing;
+      addTodos.push(todo);
+      this.setState({
+        ongoing: addTodos,
+        todo: ""
+      });
+      this.saveToLocalStorage();
+    }
   };
 
   saveToLocalStorage = () => {
