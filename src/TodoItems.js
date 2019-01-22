@@ -10,6 +10,18 @@ class TodoItem extends Component {
     todo: ""
   };
 
+  componentDidMount() {
+    const storage = localStorage.getItem("todos");
+
+    if (storage) {
+      const todos = JSON.parse(storage);
+      this.setState({
+        ongoing: todos.ongoing,
+        done: todos.done
+      });
+    }
+  }
+
   addTodo = event => {
     event.preventDefault();
 
@@ -20,7 +32,13 @@ class TodoItem extends Component {
       ongoing: addTodos,
       todo: ""
     });
+    this.saveToLocalStorage();
   };
+
+  saveToLocalStorage = () => {
+    const { ongoing, done } = this.state;
+    localStorage.setItem("todos", JSON.stringify({ ongoing, done }))
+  }
 
   handleChange = event => {
     this.setState({
@@ -42,6 +60,8 @@ class TodoItem extends Component {
       ongoing: removeTodo,
       done: completed
     });
+
+    this.saveToLocalStorage();
   };
 
   render() {
