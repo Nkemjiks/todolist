@@ -1,6 +1,5 @@
 {
   "name": "todolist",
-  "homepage": "http://nkemjiks.github.io/todolist",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
