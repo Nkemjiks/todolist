@@ -11,6 +11,7 @@ class Store {
       completed: false
     };
     this.todoList.push(todo);
+    this.saveToLocalStorage();
   }
 
   updateTodo(value) {
