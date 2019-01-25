@@ -15,7 +15,7 @@ class Store {
 
   updateTodo(value) {
     const index = this.todoList.findIndex(
-      todoListItem => todoListItem.item === value
+      todoListItem => todoListItem.item === value && todoListItem.completed === false
     );
     this.todoList[index].completed = true;
     this.saveToLocalStorage();
