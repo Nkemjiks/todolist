@@ -1,12 +1,11 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 import "./App.css";
 import OngoingTodo from "./OngoingTodo.js";
 import CompletedTodo from "./CompletedTodo.js";
 
 class TodoItem extends Component {
   state = {
-    ongoing: [],
-    done: [],
     todo: ""
   };
 
@@ -15,59 +14,31 @@ class TodoItem extends Component {
 
     if (storage) {
       const todos = JSON.parse(storage);
-      this.setState({
-        ongoing: todos.ongoing,
-        done: todos.done
-      });
+      this.props.store.updateState(todos);
     }
   }
 
   addTodo = event => {
     event.preventDefault();
 
-    const { ongoing, todo } = this.state;
-    if(todo !== '') {
-      const addTodos = ongoing;
-      addTodos.push(todo);
+    const { todo } = this.state;
+    if (todo !== "") {
+      this.props.store.pushTodo(todo);
       this.setState({
-        ongoing: addTodos,
         todo: ""
       });
-      this.saveToLocalStorage();
     }
   };
 
-  saveToLocalStorage = () => {
-    const { ongoing, done } = this.state;
-    localStorage.setItem("todos", JSON.stringify({ ongoing, done }))
-  }
-
   handleChange = event => {
     this.setState({
-      [event.target.name]: event.target.value
+      todo: event.target.value
     });
-  };
-
-  handleCheck = value => {
-    const { ongoing, done } = this.state;
-
-    const removeTodo = ongoing;
-    const index = removeTodo.indexOf(value);
-    removeTodo.splice(index, 1);
-
-    const completed = done;
-    completed.push(value);
-
-    this.setState({
-      ongoing: removeTodo,
-      done: completed
-    });
-
-    this.saveToLocalStorage();
   };
 
   render() {
-    const { ongoing, done, todo } = this.state;
+    const { todo } = this.state;
+    const { store } = this.props;
 
     return (
       <div className="container">
@@ -98,20 +69,30 @@ class TodoItem extends Component {
         >
           <div className="col bg-secondary mr-3 px-3 py-3 rounded text-light">
             <h3>Ongoing</h3>
-            {ongoing.length === 0 && <em>You have not added any todos</em>}
-            {ongoing.length !== 0 && (
-              <OngoingTodo ongoing={ongoing} handlesCheck={this.handleCheck} />
+            {store.ongoingTodo.length === 0 ? (
+              <em>You have not added any todos</em>
+            ) : (
+              <OngoingTodo
+                store={store}
+                ongoing={store.ongoingTodo}
+                handlesCheck={this.handleCheck}
+              />
             )}
           </div>
           <div className="col vh-90 bg-light ml-3 px-3 py-3 rounded">
             <h3>Done</h3>
-            {done.length === 0 && <em>You have not completed any todos yet</em>}
-            {done.length !== 0 && <CompletedTodo done={done} />}
+            {store.completedTodo.length === 0 ? (
+              <em>You have not completed any todos yet</em>
+            ) : (
+              <CompletedTodo done={store.completedTodo} />
+            )}
           </div>
         </div>
       </div>
     );
   }
 }
+
+TodoItem = observer(TodoItem);
 
 export default TodoItem;

@@ -15,7 +15,7 @@ const CompletedTodo = props =>
         htmlFor="defaultCheck2"
         style={{ textDecoration: "line-through" }}
       >
-        {value}
+        {value.item}
       </label>
     </div>
   ));
